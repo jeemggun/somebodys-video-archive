@@ -495,46 +495,53 @@
     </section>
   </main>
 
-  <script>
-    const titleInput = document.getElementById('title');
-    const statusInput = document.getElementById('status');
-    const ratingInput = document.getElementById('rating');
-    const spineTitle = document.getElementById('spineTitle');
-    const spineStatus = document.getElementById('spineStatus');
-    const spineRating = document.getElementById('spineRating');
-    const form = document.getElementById('tapeForm');
-    const savedNote = document.getElementById('savedNote');
+ <script>
+  const titleInput = document.getElementById('title');
+  const statusInput = document.getElementById('status');
+  const ratingInput = document.getElementById('rating');
+  const spineTitle = document.getElementById('spineTitle');
+  const spineStatus = document.getElementById('spineStatus');
+  const spineRating = document.getElementById('spineRating');
+  const form = document.getElementById('tapeForm');
+  const savedNote = document.getElementById('savedNote');
 
-    function updatePreview() {
-      const title = titleInput.value.trim() || 'UNTITLED TAPE';
-      spineTitle.textContent = title;
-      spineStatus.textContent = statusInput.value.toUpperCase();
-      spineRating.textContent = ratingInput.value === 'Not Rated Yet' ? 'NO RATE' : ratingInput.value;
-    }
+  function updatePreview() {
+    const title = titleInput.value.trim() || 'UNTITLED TAPE';
+    spineTitle.textContent = title;
+    spineStatus.textContent = statusInput.value.toUpperCase();
+    spineRating.textContent = ratingInput.value === 'Not Rated Yet' ? 'NO RATE' : ratingInput.value;
+  }
 
-    titleInput.addEventListener('input', updatePreview);
-    statusInput.addEventListener('change', updatePreview);
-    ratingInput.addEventListener('change', updatePreview);
+  titleInput.addEventListener('input', updatePreview);
+  statusInput.addEventListener('change', updatePreview);
+  ratingInput.addEventListener('change', updatePreview);
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
 
-      const selectedOtt = Array.from(document.querySelectorAll('.ott-chip input:checked'))
-        .map(input => input.value);
+    const selectedOtt = Array.from(document.querySelectorAll('.ott-chip input:checked'))
+      .map(input => input.value);
 
-      const tape = {
-        title: titleInput.value.trim(),
-        status: statusInput.value,
-        type: document.getElementById('type').value,
-        rating: document.getElementById('rating').value,
-        year: document.getElementById('year').value.trim(),
-        availableOn: selectedOtt,
-        memo: document.getElementById('memo').value.trim()
-      };
+    const tape = {
+      id: Date.now(),
+      title: titleInput.value.trim() || 'Untitled Tape',
+      status: statusInput.value,
+      type: document.getElementById('type').value,
+      rating: document.getElementById('rating').value,
+      year: document.getElementById('year').value.trim(),
+      availableOn: selectedOtt,
+      memo: document.getElementById('memo').value.trim(),
+      createdAt: new Date().toISOString()
+    };
 
-      console.log('Saved tape preview:', tape);
-      savedNote.textContent = 'Tape saved locally later. For now, this is a preview.';
-    });
-  </script>
+    const savedTapes = JSON.parse(localStorage.getItem('videoTapes')) || [];
+    savedTapes.push(tape);
+    localStorage.setItem('videoTapes', JSON.stringify(savedTapes));
+
+    savedNote.textContent = 'TAPE SAVED!';
+    form.reset();
+    updatePreview();
+  });
+</script>
 </body>
 </html>
