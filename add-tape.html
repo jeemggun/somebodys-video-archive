@@ -107,8 +107,7 @@
 
     .spine-title {
       writing-mode: vertical-rl;
-      text-orientation: upright;
-      transform: none;
+      transform: rotate(180deg);
       font-size: 22px;
       font-weight: 900;
       letter-spacing: 0.08em;
@@ -405,7 +404,7 @@
       </div>
       <div class="spine-status">
         <span id="spineStatus">VIDEO</span>
-        <span>CASSETTE</span>
+        <span id="spineRating">★★★★★</span>
       </div>
     </aside>
 
@@ -497,8 +496,10 @@
   <script>
     const titleInput = document.getElementById('title');
     const statusInput = document.getElementById('status');
+    const ratingInput = document.getElementById('rating');
     const spineTitle = document.getElementById('spineTitle');
     const spineStatus = document.getElementById('spineStatus');
+    const spineRating = document.getElementById('spineRating');
     const form = document.getElementById('tapeForm');
     const savedNote = document.getElementById('savedNote');
 
@@ -506,10 +507,12 @@
       const title = titleInput.value.trim() || 'UNTITLED TAPE';
       spineTitle.textContent = title;
       spineStatus.textContent = statusInput.value.toUpperCase();
+      spineRating.textContent = ratingInput.value === 'Not Rated Yet' ? 'NO RATE' : ratingInput.value;
     }
 
     titleInput.addEventListener('input', updatePreview);
     statusInput.addEventListener('change', updatePreview);
+    ratingInput.addEventListener('change', updatePreview);
 
     form.addEventListener('submit', function(event) {
       event.preventDefault();
